@@ -1,0 +1,38 @@
+pipeline {
+  agent { label 'project' }
+  stages {
+    stage('Build project') {
+      steps {
+        script {
+          dir('project') {
+            sh 'cmake . && make'
+          }
+        }
+      }
+    }
+    stage('Test project with JavaTester') {
+      steps {
+        script {
+          dir('project/javatester') {
+            sh 'mvn clean package'
+            sh 'chmod +x 01_build.sh'
+            sh './01_build.sh'
+            sh 'chmod +x 02_run.sh'
+            sh './02_run.sh'
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      script {
+        dir('project') {
+          sh 'zip -r Auslieferungspaket.zip inc Main lib javatester/src/main/java/*.h javatester/src/main/java/lib javatester/target/*.jar README.md'
+        }
+      }
+      archiveArtifacts artifacts: 'project/Auslieferungspaket.zip', allowEmptyArchive: true
+    }
+  }
+}

@@ -1,0 +1,41 @@
+language: java
+
+jdk:
+  - openjdk17
+
+dist: focal
+
+addons:
+  apt:
+    packages:
+      - cmake
+      - make
+      - zip
+      - maven
+      - openjdk-17-jdk
+      - build-essential
+      - cmake
+
+jobs:
+  include:
+    - name: "Build project and Test project with JavaTester"
+      script:
+        - cd project
+        - cmake . && make
+        - cd javatester
+        - mvn clean package
+        - chmod +x 01_build.sh && ./01_build.sh
+        - chmod +x 02_run.sh && ./02_run.sh
+        - cd ../..
+after_success:
+  - cd project
+  - zip -r Auslieferungspaket.zip inc Main lib javatester/src/main/java/*.h javatester/src/main/java/lib javatester/target/*.jar README.md
+  - cd ..
+
+deploy:
+  provider: releases
+  token: $GITHUB_TOKEN
+  file: project/Auslieferungspaket.zip
+  skip_cleanup: true
+  on:
+    tags: true

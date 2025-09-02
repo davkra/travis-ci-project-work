@@ -1,0 +1,19 @@
+# CMake
+build/
+CMakeFiles/
+cmake_install.cmake
+CMakeCache.txt
+Makefile
+
+# Maven
+target/
+
+# Output
+*.d
+*.o
+*.so
+
+Main
+
+MyNativeClass.class
+at_libtester_MyNativeClass.h
