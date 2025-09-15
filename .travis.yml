@@ -1,9 +1,6 @@
 language: java
 
-jdk:
-  - openjdk17
-
-dist: focal
+dist: noble
 
 addons:
   apt:
@@ -14,7 +11,6 @@ addons:
       - maven
       - openjdk-17-jdk
       - build-essential
-      - cmake
 
 jobs:
   include:
@@ -39,3 +35,4 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+
