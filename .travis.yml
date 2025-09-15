@@ -12,6 +12,10 @@ addons:
       - openjdk-17-jdk
       - build-essential
 
+cache:
+  directories:
+    - $HOME/.m2
+
 jobs:
   include:
     - name: "Build project and Test project with JavaTester"
@@ -23,6 +27,7 @@ jobs:
         - chmod +x 01_build.sh && ./01_build.sh
         - chmod +x 02_run.sh && ./02_run.sh
         - cd ../..
+
 after_success:
   - cd project
   - zip -r Auslieferungspaket.zip inc Main lib javatester/src/main/java/*.h javatester/src/main/java/lib javatester/target/*.jar README.md
